@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EzMart Dashboard</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Use Inter font family -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F8F8; /* Light background matching the image */
+            color: #333;
+        }
+        /* Custom styles for simulating the charts/gradients */
+        .chart-donut-target {
+            background: radial-gradient(closest-side, white 75%, transparent 80% 100%),
+                        conic-gradient(#F97316 85%, #FFEDD5 0);
+        }
+        .chart-donut-categories {
+            background: radial-gradient(closest-side, white 60%, transparent 65% 100%),
+                        conic-gradient(#F97316 50%, #FFCC80 65%, #F0A370 75%, #E59A65 85%, #E09060 100%);
+        }
+        /* Custom style for the active orange block on Total Sales card */
+        .sales-card-active-bg {
+            background-color: #FEEBC3;
+        }
+        
+        /* Mobile menu overlay */
+        .sidebar-overlay {
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 40;
+        }
+        .sidebar-open .sidebar-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+    <!-- Lucide Icons for better icon fidelity -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="overflow-x-hidden" x-data="{ open: false }">
+
+    <!-- Main Container -->
+    <div class="flex h-screen antialiased text-gray-900 bg-gray-50 lg:overflow-hidden">
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed top-0 left-0 z-50 flex flex-col h-full overflow-y-auto duration-300 transform bg-white shadow-xl transition-all lg:static lg:shadow-none"
+               :class="{ 'translate-x-0': open, '-translate-x-full': !open }" style="width: 280px; max-width: 100%;">
+            
+            <!-- Logo -->
+            <div class="flex items-center justify-between p-6 h-20 border-b">
+                <div class="flex items-center space-x-2">
+                    <span class="p-1 rounded-lg bg-orange-500 text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-bag"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    </span>
+                    <span class="text-xl font-semibold">EzMart</span>
+                </div>
+                <!-- Close button for mobile -->
+                <button @click="open = false" class="lg:hidden p-1 rounded-full text-gray-500 hover:bg-gray-100 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-grow p-4 space-y-2">
+                <!-- Dashboard Active Link -->
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-xl font-medium text-white bg-orange-500 transition-all hover:bg-orange-600 shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard"><rect width="7" height="9" x="3" y="3"/><rect width="7" height="5" x="14" y="3"/><rect width="7" height="9" x="14" y="12"/><rect width="7" height="5" x="3" y="17"/></svg>
+                    <span>ড্যাশবোর্ড</span>
+                </a>
+
+                <!-- Orders Link -->
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-xl font-medium text-gray-600 transition-all hover:bg-gray-100 hover:text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2Z"/><path d="M3 17V8a2 2 0 0 1 2-2h3"/><path d="M3 17a2 2 0 0 0 2 2h14"/></svg>
+                    <span>অর্ডার</span>
+                </a>
+
+                <!-- Products Link -->
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-xl font-medium text-gray-600 transition-all hover:bg-gray-100 hover:text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-box"><path d="M21 8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/><path d="M12 2v6"/><path d="M12 18v4"/><path d="M18 10h-12"/></svg>
+                    <span>পণ্য</span>
+                </a>
+
+                <!-- Customers Link -->
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-xl font-medium text-gray-600 transition-all hover:bg-gray-100 hover:text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <span>গ্রাহক</span>
+                </a>
+
+                <!-- Reports Link -->
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-xl font-medium text-gray-600 transition-all hover:bg-gray-100 hover:text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bar-chart-3"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                    <span>রিপোর্ট</span>
+                </a>
+
+                <!-- Discounts Link -->
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-xl font-medium text-gray-600 transition-all hover:bg-gray-100 hover:text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-percent"><path d="M19 5 5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+                    <span>ডিসকাউন্ট</span>
+                </a>
+                
+                <div class="h-4"></div>
+
+                <!-- Integrations Link -->
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-xl font-medium text-gray-600 transition-all hover:bg-gray-100 hover:text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plug-zap"><path d="m13 2-2-2-2 2"/><path d="M11 20H8.5V11h-2V20H3"/><path d="M13 20h2.5V11h2V20h3"/></svg>
+                    <span>ইন্টিগ্রেশন</span>
+                </a>
+
+                <!-- Help Link -->
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-xl font-medium text-gray-600 transition-all hover:bg-gray-100 hover:text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-help"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                    <span>সাহায্য</span>
+                </a>
+                
+                <!-- Settings Link -->
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-xl font-medium text-gray-600 transition-all hover:bg-gray-100 hover:text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.22l-.4.18c-.68.32-1.32.78-1.88 1.34l-.18.4-.22.44a2 2 0 0 0 0 2.83l.22.44.18.4c.56.56 1.2 1.02 1.88 1.34l.4.18.22.44v.22a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.22l.4-.18c.68-.32 1.32-.78 1.88-1.34l.18-.4.22-.44a2 2 0 0 0 0-2.83l-.22-.44-.18-.4c-.56-.56-1.2-1.02-1.88-1.34l-.4-.18-.22-.44v-.22a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <span>সেটিংস</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Sidebar overlay for mobile -->
+        <div class="fixed inset-0 bg-black bg-opacity-30 sidebar-overlay lg:hidden" :class="{ 'opacity-100 pointer-events-auto': open }" @click="open = false"></div>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+            
+            <!-- Header/Top Bar -->
+            <header class="flex items-center justify-between h-20 px-6 bg-white border-b sticky top-0 z-10">
+                <!-- Hamburger Menu (Mobile) and Title -->
+                <div class="flex items-center space-x-4">
+                    <button @click="open = true" class="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors lg:hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+                    </button>
+                    <h1 class="text-2xl font-semibold hidden sm:block">ড্যাশবোর্ড</h1>
+                </div>
+
+                <!-- Search and User Profile -->
+                <div class="flex items-center space-x-4">
+                    <div class="hidden sm:block">
+                        <div class="relative w-full max-w-xs">
+                            <input type="text" placeholder="অর্ডার ইত্যাদি অনুসন্ধান করুন" class="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-xl focus:ring-orange-500 focus:border-orange-500 transition duration-150">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Icons -->
+                    <button class="p-2 rounded-full text-gray-500 hover:bg-gray-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell"><path d="M18.6 13a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3h1.4l.6 1.2.6 1.2H17l.6-1.2.6-1.2Z"/><path d="M12 18v2"/></svg>
+                    </button>
+                    <div id="all-account" class="hidden absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
+                        <ul>
+                            <li class="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
+                                <img src="https://via.placeholder.com/30" class="rounded-full mr-2"  >
+                                <span>User One</span>
+                            </li>
+                            <li class="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
+                                <img src="https://via.placeholder.com/30" class="rounded-full mr-2"  >
+                                <span>User Two</span>
+                            </li>
+                            <li class="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
+                                <img src="https://via.placeholder.com/30" class="rounded-full mr-2"  >
+                                <span>User Three</span>
+                            </li>
+                        </ul>
+                        <div class="p-2 border-t">
+                            <button class="w-full text-left text-blue-500 hover:bg-gray-100 p-2 rounded">Add Account</button>
+                        </div>
+                    </div>
+                    <button class="p-2 rounded-full text-gray-500 hover:bg-gray-100 transition-colors">
+                        <svg  onclick="document.getElementById('all-account').classList.toggle('hidden')"   xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </button>
+                    
+
+                    
+            <div class="relative flex items-center space-x-2 border-l pl-4 cursor-pointer hover:bg-gray-50 p-2 rounded-xl transition-colors">
+                <img class="w-8 h-8 rounded-full object-cover" 
+                    onclick="document.getElementById('account-menu').classList.toggle('hidden')" 
+                    src="https://placehold.co/100x100/fecaca/dc2626?text=M" 
+                    alt="Marcus George">
+ 
+                <div id="account-menu" class="hidden absolute top-full mt-2 right-0 bg-white border rounded-lg shadow-lg w-40">
+                    <ul class="flex flex-col">
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">মারকাস জর্জ</li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">প্রোফাইল</li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">সেটিংস</li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">লগ আউট</li>
+                    </ul>
+                </div>
+            </div>
+
+
+                </div>
+            </header>
+
+            <!-- Dashboard Grid -->
+            <div class="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto">
+                <div class="grid grid-cols-1 gap-6">
+
+                    <!-- KPI Cards (Total Sales, Orders, Visitors) -->
+                   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
+
+    <!-- Total Sales Card -->
+    <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-lg transition-transform duration-300 transform hover:scale-[1.01] col-span-1 md:col-span-1 lg:col-span-2">
+        <div class="flex justify-between items-start mb-4">
+            <h3 class="text-sm font-medium text-gray-500">মোট বিক্রয়</h3>
+            <div class="p-1.5 rounded-full text-orange-600 bg-orange-50">
+                <!-- Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wallet"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3"/><path d="M12 21h7a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6"/><path d="M16 16h-4"/></svg>
+            </div>
+        </div>
+        <p class="text-3xl font-bold mb-1">$983,410</p>
+        <div class="flex items-center text-xs space-x-1">
+            <span class="text-green-600 font-semibold flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+                2.85%
+            </span>
+            <span class="text-gray-500">গত মাসের তুলনায়</span>
+        </div>
+    </div>
+
+    <!-- Total Orders Card -->
+    <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-lg transition-transform duration-300 transform hover:scale-[1.01] col-span-1 md:col-span-1 lg:col-span-2">
+        <div class="flex justify-between items-start mb-4">
+            <h3 class="text-sm font-medium text-gray-500">মোট অর্ডার</h3>
+            <div class="p-1.5 rounded-full text-gray-500 bg-gray-100">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="m1 1h4l2.6 11.2c.2.8.9 1.4 1.7 1.4h9c.8 0 1.5-.6 1.7-1.4L23 5H6"/></svg>
+            </div>
+        </div>
+        <p class="text-3xl font-bold mb-1">58,375</p>
+        <div class="flex items-center text-xs space-x-1">
+            <span class="text-red-500 font-semibold flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down-right"><path d="M7 17h10V7"/><path d="M17 17 7 7"/></svg>
+                2.51%
+            </span>
+            <span class="text-gray-500">গত মাসের তুলনায়</span>
+        </div>
+    </div>
+
+    <!-- Total Visitors Card -->
+    <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-lg transition-transform duration-300 transform hover:scale-[1.01] col-span-1 md:col-span-1 lg:col-span-2">
+        <div class="flex justify-between items-start mb-4">
+            <h3 class="text-sm font-medium text-gray-500">মোট দর্শক</h3>
+            <div class="p-1.5 rounded-full text-blue-500 bg-blue-100">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye"><path d="M2 12s3 7 10 7 10-7 10-7-3-7-10-7-10 7-10 7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+        </div>
+        <p class="text-3xl font-bold mb-1">237,782</p>
+        <div class="flex items-center text-xs space-x-1">
+            <span class="text-green-600 font-semibold flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+                +0.62%
+            </span>
+            <span class="text-gray-500">গত সপ্তাহের তুলনায়</span>
+        </div>
+    </div>
+</div>
+
+                    <!-- Revenue Analytics Chart -->
+                    <div class="grid grid-cols-1  lg:grid-cols-12 gap-6">
+    <div class="bg-white p-6 rounded-2xl shadow-sm col-span-12 md:col-span-12 lg:col-span-12">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-lg font-semibold">রাজস্ব বিশ্লেষণ</h2>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center text-sm text-gray-500 space-x-2">
+                    <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+                    <span>রাজস্ব</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-500 space-x-2">
+                    <span class="w-2 h-2 rounded-full border border-dashed border-gray-300"></span>
+                    <span>অর্ডার</span>
+                </div>
+                <span class="text-sm font-medium text-orange-500 p-2 bg-orange-50 rounded-lg">গত ৮ দিনের ↓</span>
+            </div>
+        </div>
+        <div class="relative h-64">
+            <canvas id="revenueChart" class="w-full h-full"></canvas>
+        </div>
+    </div>
+
+
+
+
+ 
+</div>
+
+</div>
+
+                    
+                    <div class="col-span-12 lg:col-span-3 space-y-6">
+ 
+                        <div class="bg-white p-6 rounded-2xl shadow-sm text-center">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-lg font-semibold">মাসিক লক্ষ্য</h2>
+                                <button class="p-1 text-gray-400 hover:text-gray-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                                </button>
+                            </div>
+                            
+                            <div class="relative w-32 h-32 mx-auto mb-6 chart-donut-target rounded-full">
+                                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                    <p class="text-2xl font-bold">85%</p>
+                                    <div class="flex items-center text-xs font-semibold text-green-600">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+                                        +6.82%
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <p class="text-xs text-orange-500 font-medium mb-3">অসাধারণ অগ্রগতি! 🎉</p>
+                            <p class="text-sm text-gray-500 mb-6 leading-relaxed">আমাদের অর্জন $100,000 বৃদ্ধি পেয়েছে, চলুন আগামী মাসে $500K পৌঁছাই।</p>
+
+                            <div class="flex justify-between space-x-2 text-sm">
+                                <div class="flex-1 p-3 rounded-xl bg-red-50 flex flex-col items-center">
+                                    <p class="text-gray-500 text-xs mb-1">লক্ষ্য</p>
+                                    <p class="font-semibold text-gray-800">$600,000</p>
+                                </div>
+                                <div class="flex-1 p-3 rounded-xl bg-orange-50 flex flex-col items-center">
+                                    <p class="text-gray-500 text-xs mb-1">রাজস্ব</p>
+                                    <p class="font-semibold text-gray-800">$510,000</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Top Categories Card (Donut Chart) -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-lg font-semibold">শীর্ষ বিভাগসমূহ</h2>
+                                <a href="#" class="text-sm text-orange-500 font-medium hover:text-orange-600 transition-colors">সব দেখুন</a>
+                            </div>
+
+                            <div class="relative w-full flex items-center justify-center mb-6">
+                                <div class="w-40 h-40 chart-donut-categories rounded-full flex items-center justify-center">
+                                    <div class="text-center">
+                                        <p class="text-lg text-gray-500">মোট বিক্রয়</p>
+                                        <p class="text-2xl font-bold">$3,400,000</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Categories Legend -->
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center text-sm">
+                                    <div class="flex items-center space-x-3">
+                                        <span class="w-3 h-3 rounded-full bg-orange-500"></span>
+                                        <span class="text-gray-800">ইলেকট্রনিক্স</span>
+                                    </div>
+                                    <span class="font-semibold">$1,200,000</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <div class="flex items-center space-x-3">
+                                        <span class="w-3 h-3 rounded-full bg-orange-400"></span>
+                                        <span class="text-gray-800">ফ্যাশন</span>
+                                    </div>
+                                    <span class="font-semibold">$980,000</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <div class="flex items-center space-x-3">
+                                        <span class="w-3 h-3 rounded-full bg-orange-300"></span>
+                                        <span class="text-gray-800">হোম ও কিচেন</span>
+                                    </div>
+                                    <span class="font-semibold">$750,000</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <div class="flex items-center space-x-3">
+                                        <span class="w-3 h-3 rounded-full bg-orange-200"></span>
+                                        <span class="text-gray-800">বিউটি ও পার্সোনাল কেয়ার</span>
+                                    </div>
+                                    <span class="font-semibold">$500,000</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Traffic Sources Card -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-lg font-semibold">ট্রাফিক সোর্স</h2>
+                                <button class="p-1 text-gray-400 hover:text-gray-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                                </button>
+                            </div>
+                            
+                            <!-- Traffic List -->
+                            <div class="space-y-4">
+                                <!-- Direct Traffic -->
+                                <div class="text-sm">
+                                    <div class="flex justify-between mb-1">
+                                        <span>ডাইরেক্ট ট্রাফিক</span>
+                                        <span class="font-semibold">40%</span>
+                                    </div>
+                                    <div class="h-1.5 w-full bg-gray-100 rounded-full">
+                                        <div class="h-full bg-orange-500 rounded-full" style="width: 40%;"></div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Organic Search -->
+                                <div class="text-sm">
+                                    <div class="flex justify-between mb-1">
+                                        <span>অর্গানিক সার্চ</span>
+                                        <span class="font-semibold">30%</span>
+                                    </div>
+                                    <div class="h-1.5 w-full bg-gray-100 rounded-full">
+                                        <div class="h-full bg-orange-400 rounded-full" style="width: 30%;"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Social Media -->
+                                <div class="text-sm">
+                                    <div class="flex justify-between mb-1">
+                                        <span>সোশ্যাল মিডিয়া</span>
+                                        <span class="font-semibold">15%</span>
+                                    </div>
+                                    <div class="h-1.5 w-full bg-gray-100 rounded-full">
+                                        <div class="h-full bg-orange-300 rounded-full" style="width: 15%;"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Referral Traffic -->
+                                <div class="text-sm">
+                                    <div class="flex justify-between mb-1">
+                                        <span>রেফারেল ট্রাফিক</span>
+                                        <span class="font-semibold">10%</span>
+                                    </div>
+                                    <div class="h-1.5 w-full bg-gray-100 rounded-full">
+                                        <div class="h-full bg-orange-200 rounded-full" style="width: 10%;"></div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Email Campaigns -->
+                                <div class="text-sm">
+                                    <div class="flex justify-between mb-1">
+                                        <span>ইমেইল ক্যাম্পেইন</span>
+                                        <span class="font-semibold">5%</span>
+                                    </div>
+                                    <div class="h-1.5 w-full bg-gray-100 rounded-full">
+                                        <div class="h-full bg-orange-100 rounded-full" style="width: 5%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            
+
+        </main>
+    </div>
+
+    <!-- JavaScript for Sidebar Toggle (using simple state simulation) -->
+    <script>
+        // Simple state simulation for Tailwind Alpine.js-like behavior since we can't import Alpine.js
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            const menuButton = document.querySelector('header button:first-child');
+            const closeButton = sidebar.querySelector('button');
+
+            const toggleSidebar = (force) => {
+                const isOpen = force !== undefined ? force : body.classList.contains('sidebar-open');
+                if (isOpen) {
+                    body.classList.remove('sidebar-open');
+                    sidebar.classList.add('-translate-x-full');
+                    sidebar.classList.remove('translate-x-0');
+                } else {
+                    body.classList.add('sidebar-open');
+                    sidebar.classList.remove('-translate-x-full');
+                    sidebar.classList.add('translate-x-0');
+                }
+            };
+            
+            // Add click listeners
+            if (menuButton) menuButton.addEventListener('click', () => toggleSidebar(false));
+            if (closeButton) closeButton.addEventListener('click', () => toggleSidebar(true));
+            if (overlay) overlay.addEventListener('click', () => toggleSidebar(true));
+
+            // Initial state for large screens (sidebar always visible)
+            function checkScreenSize() {
+                if (window.innerWidth >= 1024) { // Tailwind's 'lg' breakpoint
+                    body.classList.remove('sidebar-open');
+                    sidebar.classList.remove('-translate-x-full');
+                    sidebar.classList.remove('translate-x-0');
+                } else {
+                    // Start hidden on smaller screens
+                    toggleSidebar(true); 
+                }
+            }
+            window.addEventListener('resize', checkScreenSize);
+            checkScreenSize(); // Initial check
+        });
+
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+
+        // ----------------------------------------------------------------------
+        // Chart Simulation (Revenue Analytics - Line Chart)
+        // ----------------------------------------------------------------------
+
+        function drawRevenueChart() {
+            const canvas = document.getElementById('revenueChart');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            const container = canvas.parentElement;
+
+            // Set canvas size to match container (responsive)
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+
+            // Chart Data (simulated for visual representation)
+            const revenueData = [20, 35, 25, 45, 60, 50, 70, 65, 55]; // Orange line
+            const orderData = [10, 20, 15, 30, 40, 35, 50, 45, 35]; // Dotted line
+            const labels = ["11 Aug", "12 Aug", "13 Aug", "14 Aug", "15 Aug", "16 Aug", "17 Aug", "18 Aug", "19 Aug"];
+            const maxVal = 70;
+            const padding = 30;
+            const chartHeight = height - padding * 2;
+            const chartWidth = width - padding * 2;
+
+            // Function to get X position
+            const getX = (index) => padding + (index / (revenueData.length - 1)) * chartWidth;
+            // Function to get Y position
+            const getY = (value) => height - padding - (value / maxVal) * chartHeight;
+
+
+            // --- Draw Dotted Line (Order) ---
+            ctx.strokeStyle = '#D1D5DB'; // Gray
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            
+            ctx.beginPath();
+            orderData.forEach((value, index) => {
+                const x = getX(index);
+                const y = getY(value);
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            ctx.stroke();
+
+            // --- Draw Solid Line (Revenue) ---
+            ctx.setLineDash([]);
+            ctx.strokeStyle = '#F97316'; // Orange
+            
+            ctx.beginPath();
+            revenueData.forEach((value, index) => {
+                const x = getX(index);
+                const y = getY(value);
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            ctx.stroke();
+
+            // --- Draw Area Fill (for Revenue) ---
+            ctx.fillStyle = 'rgba(251, 146, 60, 0.1)'; // Light Orange background
+            ctx.beginPath();
+            ctx.moveTo(getX(0), getY(revenueData[0]));
+            revenueData.forEach((value, index) => {
+                ctx.lineTo(getX(index), getY(value));
+            });
+            ctx.lineTo(getX(revenueData.length - 1), height - padding);
+            ctx.lineTo(getX(0), height - padding);
+            ctx.closePath();
+            ctx.fill();
+
+            // --- Draw Dots & Highlight Circle (17 Aug - $14,521) ---
+            revenueData.forEach((value, index) => {
+                const x = getX(index);
+                const y = getY(value);
+
+                // Normal dots
+                ctx.fillStyle = '#F97316';
+                ctx.beginPath();
+                ctx.arc(x, y, 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Highlighted point (17 Aug - index 6)
+            const highlightIndex = 6;
+            const hX = getX(highlightIndex);
+            const hY = getY(revenueData[highlightIndex]);
+
+            // Draw large white circle
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(hX, hY, 7, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw orange ring
+            ctx.strokeStyle = '#F97316';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(hX, hY, 7, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            // Draw vertical dashed line for highlight
+            ctx.strokeStyle = '#E5E7EB'; // Light gray
+            ctx.setLineDash([2, 2]);
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(hX, hY + 7);
+            ctx.lineTo(hX, height - padding);
+            ctx.stroke();
+            ctx.setLineDash([]); // Reset line dash
+
+
+            // --- Draw Axes and Labels ---
+
+            // Draw X-axis labels
+            ctx.fillStyle = '#6B7280'; // Gray 500
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            labels.forEach((label, index) => {
+                ctx.fillText(label, getX(index), height - padding + 15);
+            });
+            
+            // Draw Y-axis labels (simulated: 0, 4K, 8K, 12K, 16K)
+            ctx.textAlign = 'right';
+            const yLabels = ["0", "4K", "8K", "12K", "16K"];
+            const yValues = [0, 20, 40, 60, 80]; // Fictional values corresponding to data range
+            yLabels.forEach((label, index) => {
+                const y = getY((index / 4) * maxVal);
+                ctx.fillText(label, padding - 10, y + 3);
+            });
+        }
+
+        // Redraw on load and resize for responsiveness
+        window.addEventListener('load', drawRevenueChart);
+        window.addEventListener('resize', drawRevenueChart);
+
+    </script>
+</body>
+</html>

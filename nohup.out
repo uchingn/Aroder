@@ -1,0 +1,13 @@
+/home/uchain-marma/venv/lib/python3.12/site-packages/gunicorn/util.py:25: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+[2025-10-29 09:16:02 +0600] [8549] [INFO] Starting gunicorn 20.1.0
+[2025-10-29 09:16:02 +0600] [8549] [INFO] Listening at: http://0.0.0.0:8000 (8549)
+[2025-10-29 09:16:02 +0600] [8549] [INFO] Using worker: sync
+[2025-10-29 09:16:02 +0600] [8550] [INFO] Booting worker with pid: 8550
+[2025-10-29 09:16:02 +0600] [8551] [INFO] Booting worker with pid: 8551
+[2025-10-29 09:16:02 +0600] [8552] [INFO] Booting worker with pid: 8552
+[2025-10-29 09:18:15 +0600] [8549] [WARNING] Worker with pid 8552 was terminated due to signal 9
+[2025-10-29 09:18:15 +0600] [8641] [INFO] Booting worker with pid: 8641
+[2025-10-29 09:36:16 +0600] [8549] [CRITICAL] WORKER TIMEOUT (pid:8551)
+[2025-10-29 03:36:16 +0000] [8551] [INFO] Worker exiting (pid: 8551)
+[2025-10-29 09:36:16 +0600] [9604] [INFO] Booting worker with pid: 9604

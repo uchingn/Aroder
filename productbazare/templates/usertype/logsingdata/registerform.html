@@ -1,0 +1,183 @@
+{% extends 'homeAddmin/home.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% block head %}
+    
+    <style>
+        /* ফোকাসে গ্লো এফেক্ট */
+        .input-focus-glow:focus {
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5); 
+        }
+        /* এন্ট্রান্স অ্যানিমেশন */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-slide-in {
+            animation: slideInUp 0.6s ease-out forwards;
+        }
+    </style>
+ 
+
+{% endblock %}
+
+{% block title %} ই-কমার্স রেজিস্ট্রেশন (আপডেট) {% endblock %}
+{% block body %}
+<div class="bg-gray-100 flex items-center    justify-center min-h-screen p-4 font-sans py-32 sm:py-52 my-24  ">
+
+    <div class="w-full max-w-xl bg-white shadow-2xl rounded-xl overflow-hidden animate-slide-in">
+        <div class="p-8 md:p-10">
+
+            <h2 class="text-3xl font-extrabold text-gray-900 mb-2 text-center">
+                  অ্যাকাউন্ট তৈরি করুন 🛍️
+            </h2>
+            <p class="text-center text-gray-500 mb-8">
+                সবচেয়ে দ্রুত ডেলিভারির জন্য আপনার সম্পূর্ণ তথ্য দিন।
+            </p>
+            {% if messages %}
+    {% for message in messages %}
+        <div id="messagesettime" 
+             class="mb-4 p-4 rounded-lg 
+             {% if message.tags == 'success' %}bg-green-100 text-green-800
+             {% elif message.tags == 'error' %}bg-red-100 text-red-800
+             {% else %}bg-blue-100 text-blue-800{% endif %}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+            <form action="#" method="POST"  id="registerForm" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+               <div>
+                    <select name="user_type" id="user_type" class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 input-focus-glow" required>
+                        <option disabled selected value="">ব্যবহারকারীর ধরন নির্বাচন করুন</option>
+                        <option value="customer">ক্রেতা</option>
+                        <option value="seller">বিক্রেতা</option>
+                        <option value="delivery_person">ডেলিভারি পার্সন</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">সম্পূর্ণ নাম</label>
+                    <input type="text" id="name" name="name" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 input-focus-glow"
+                           placeholder="সম্পূর্ণ নাম লিখুন">
+                </div>
+
+                <div>
+                    <label for="contact" class="block text-sm font-medium text-gray-700 mb-1"> মোবাইল নম্বর</label>
+                    <input type="number" id="contact" name="contact" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 input-focus-glow"
+                           placeholder=" ০১৭********">
+                </div>
+
+                <div>
+                    <label for="address" class="block text-sm font-medium text-gray-700 mb-1">সম্পূর্ণ ঠিকানা</label>
+                    <textarea id="address" name="address" rows="3" required
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 input-focus-glow"
+                              placeholder="বাড়ি/ফ্ল্যাট নম্বর, রাস্তা, শহর, জেলা..."></textarea>
+                </div>
+
+                <div>
+                    <label for="profile_pic" class="block text-sm font-medium text-gray-700 mb-1">প্রোফাইল ছবি আপলোড (ঐচ্ছিক)</label>
+                    <input type="file" id="profile_pic" name="profile_pic" accept="image/*"
+                           class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition duration-300">
+                </div>
+
+                        <div class="relative">
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">পাসওয়ার্ড</label>
+                    <input type="password" id="password" name="password" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 input-focus-glow"
+                        placeholder="•••••••• (কমপক্ষে ৮ অক্ষর)">
+                    <button type="button" id="togglePassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                </div>
+
+                <div class="relative">
+                    <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-1">পাসওয়ার্ড নিশ্চিত করুন</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 input-focus-glow"
+                        placeholder="••••••••">
+                    <button type="button" id="toggleConfirmPassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                </div>
+
+                <p id="passwordError" class="text-red-500 text-sm hidden">পাসওয়ার্ড মিলছে না।</p>
+
+                <div class="pt-2">
+                    <button type="submit"
+                            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-lg font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 ease-in-out transform hover:scale-[1.01] active:scale-95">
+                        রেজিস্ট্রেশন সম্পূর্ণ করুন
+                    </button>
+                </div>
+
+            </form>
+
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">
+                    ইতিমধ্যে একটি অ্যাকাউন্ট আছে?
+                    <a href="{% url 'login' %}" class="font-medium text-indigo-600 hover:text-indigo-500  underline transition duration-150">
+                        লগইন করুন
+                    </a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+ 
+ <script>
+    // Wait 3 seconds, then hide the message div
+    setTimeout(function() {
+        const msg = document.getElementById("messagesettime");
+        if (msg) {
+            msg.style.transition = "opacity 0.5s ease";
+            msg.style.opacity = "0";
+            setTimeout(() => msg.remove(), 500); // remove from DOM after fade
+        }
+    }, 3000);
+
+// //   register password validetion erro show  start    // ///////////////////
+ function toggleVisibility(toggleBtnId, inputId) {
+        const toggleBtn = document.getElementById(toggleBtnId);
+        const input = document.getElementById(inputId);
+
+        toggleBtn.addEventListener('click', () => {
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            toggleBtn.innerHTML = type === 'password' ? '<i class="fa-solid fa-eye"></i>' : '<i class="fa-solid fa-eye-slash"></i>';
+        });
+    }
+
+    toggleVisibility('togglePassword', 'password');
+    toggleVisibility('toggleConfirmPassword', 'confirm-password');
+
+    
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirm-password');
+    const passwordError = document.getElementById('passwordError');
+
+    function checkPasswordMatch() {
+        if (confirmPassword.value && password.value !== confirmPassword.value) {
+            passwordError.classList.remove('hidden');
+        } else {
+            passwordError.classList.add('hidden');
+        }
+    }
+
+    password.addEventListener('input', checkPasswordMatch);
+    confirmPassword.addEventListener('input', checkPasswordMatch);
+
+</script>
+
+<script src="{% static 'js/mainjs.js' %}"></script>
+{% endblock %}

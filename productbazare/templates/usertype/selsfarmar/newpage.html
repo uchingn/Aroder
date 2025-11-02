@@ -1,0 +1,225 @@
+{% extends 'homeAddmin/home.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+{% block head %}
+<style>
+  /* Fade-in animation */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.6s forwards;
+  }
+  @keyframes fadeInUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Hover scale */
+  .hover-scale:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }
+
+  /* Circular progress */
+  svg circle:nth-child(2) {
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: stroke-dashoffset 1.5s ease-out;
+  }
+
+  .togolcol.sticky {
+    position: sticky;
+    top: 5rem;
+  }
+</style>
+{% endblock %}
+
+{% block title %}Buyer Dashboard{% endblock %}
+
+{% block body %}
+<div class="flex flex-col md:flex-row gap-6 md:gap-8 mt-20 md:p-8 py-32 my-32">
+
+  <!-- Sidebar -->
+  <div class="w-full md:w-1/4">
+    <div class="togolcol p-6 flex-shrink-0 md:sticky md:top-12 fade-in">
+     <div class="flex flex-col items-center gap-2">
+  {% if user_profile.profile_pic %}
+    <img src="{{ user_profile.profile_pic.url }}" 
+         alt="{{ user_profile.name }}" 
+         class="w-32 h-32 rounded-full border-4 border-green-500 object-cover shadow-lg">
+  {% else %}
+    <img src="{% static 'images/defult.jpg' %}" 
+         alt="Default User" 
+         class="w-32 h-32 rounded-full border-4 border-green-500 object-cover shadow-lg">
+  {% endif %}
+
+  <h2 class="text-2xl font-bold mt-4 text-green-700">{{ user_profile.name }}</h2>
+
+  <p class="text-gray-500">
+    {% if user_profile.user_type == "customer" %}
+      ক্রেতা
+    {% elif user_profile.user_type == "seller" %}
+      বিক্রেতা
+    {% elif user_profile.user_type == "delivery_person" %}
+      ডেলিভারি পার্সন
+    {% else %}
+      ব্যবহারকারী
+    {% endif %}
+  </p>
+
+  <p class="text-gray-600">ঠিকানা: <span>{{ user_profile.address }}</span></p>
+  <p class="text-gray-600">যোগাযোগ: <span>{{ user_profile.contact }}</span></p>
+  <p class="text-gray-400 text-sm mt-1">যোগদান করেছেন: {{ user_profile.created_at|date:"F j, Y" }}</p>
+</div>
+
+       <div class="flex justify-center mt-6">
+      <div class="flex items-center justify-center text-green-700 border border-gray-200 rounded-full shadow-lg h-20 w-20">
+        <a href="#" class="flex items-center justify-center w-full h-full">
+          <i class="fa-solid fa-list-check text-2xl"></i>
+        </a>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="w-full md:w-2/3 space-y-8">
+
+    <!-- Counters -->
+    <div class="flex justify-around togolcol rounded-lg shadow-md p-6 fade-in">
+      <div class="text-center">
+        <p class="text-2xl font-bold counter" data-target="25">0</p>
+        <p class="text-sm text-gray-500" data-i18n="orders">অর্ডার</p>
+      </div>
+      <div class="text-center">
+        <p class="text-2xl font-bold counter" data-target="12">0</p>
+        <p class="text-sm text-gray-500" data-i18n="pending">চলমান</p>
+      </div>
+      <div class="text-center">
+        <p class="text-2xl font-bold counter" data-target="8">0</p>
+        <p class="text-sm text-gray-500" data-i18n="suppliers">সরবরাহকারী</p>
+      </div>
+    </div>
+
+    <!-- Buyer Actions -->
+    <div class="flex flex-col sm:flex-row justify-between gap-4 rounded-lg shadow-md p-6">
+      <div class="text-center flex-1">
+        <div class="flex flex-col items-center">
+          <img class="w-20 h-20" src="{% static 'images/logo.png' %}" alt="">
+        </div>
+        <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+          আমার অর্ডারসমূহ
+        </button>
+      </div>
+
+      <div class="text-center flex-1">
+        <div class="flex flex-col items-center">
+          <img class="w-20 h-20" src="{% static 'images/logo.png' %}" alt="">
+        </div>
+        <a href=" ">
+          <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+            নতুন অর্ডার দিন
+          </button>
+        </a>
+      </div>
+
+      <div class="text-center flex-1">
+        <div class="flex flex-col items-center">
+          <img class="w-20 h-20" src="{% static 'images/logo.png' %}" alt="">
+        </div>
+        <a href="#">
+          <button class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+            অর্ডার বাতিল করুন
+          </button>
+        </a>
+      </div>
+    </div>
+
+    <!-- Order Progress -->
+    <div class="togolcol rounded-lg shadow-md p-6 fade-in">
+      <h3 class="text-xl font-semibold mb-4 text-blue-700" data-i18n="orderStatus">অর্ডার অবস্থা</h3>
+      <div class="flex flex-wrap gap-6 justify-around">
+        <div class="flex flex-col items-center">
+          <div class="relative w-24 h-24">
+            <svg class="w-24 h-24">
+              <circle cx="48" cy="48" r="45" class="stroke-blue-100" stroke-width="6" fill="none"/>
+              <circle cx="48" cy="48" r="45" class="stroke-blue-500" stroke-width="6" fill="none"
+                      stroke-dasharray="283" stroke-dashoffset="283"/>
+            </svg>
+            <span class="absolute inset-0 flex items-center justify-center text-blue-700 font-bold">80%</span>
+          </div>
+          <p class="mt-2 text-gray-600 text-sm" data-i18n="delivered">ডেলিভারি সম্পন্ন</p>
+        </div>
+
+        <div class="flex flex-col items-center">
+          <div class="relative w-24 h-24">
+            <svg class="w-24 h-24">
+              <circle cx="48" cy="48" r="45" class="stroke-blue-100" stroke-width="6" fill="none"/>
+              <circle cx="48" cy="48" r="45" class="stroke-yellow-400" stroke-width="6" fill="none"
+                      stroke-dasharray="283" stroke-dashoffset="283"/>
+            </svg>
+            <span class="absolute inset-0 flex items-center justify-center text-yellow-400 font-bold">40%</span>
+          </div>
+          <p class="mt-2 text-gray-600 text-sm" data-i18n="processing">প্রসেসিং</p>
+        </div>
+
+        <div class="flex flex-col items-center">
+          <div class="relative w-24 h-24">
+            <svg class="w-24 h-24">
+              <circle cx="48" cy="48" r="45" class="stroke-blue-100" stroke-width="6" fill="none"/>
+              <circle cx="48" cy="48" r="45" class="stroke-red-500" stroke-width="6" fill="none"
+                      stroke-dasharray="283" stroke-dashoffset="283"/>
+            </svg>
+            <span class="absolute inset-0 flex items-center justify-center text-red-500 font-bold">20%</span>
+          </div>
+          <p class="mt-2 text-gray-600 text-sm" data-i18n="pending">বাকি</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Collaborators -->
+    <div class="togolcol rounded-lg shadow-md p-6 fade-in">
+      <h3 class="text-xl font-semibold mb-4 text-blue-700" data-i18n="suppliers">সরবরাহকারী...</h3>
+      <div class="flex gap-4">
+        <div class="flex flex-col items-center hover-scale">
+          <img src="{% static 'images/about.png' %}" alt="Supplier A" class="w-20 h-20 rounded-full border-2 border-gray-200 shadow-sm">
+          <span class="text-sm mt-1 text-gray-600">রফিক</span>
+        </div>
+        <div class="flex flex-col items-center hover-scale">
+          <img src="{% static 'images/about.png' %}" alt="Supplier B" class="w-20 h-20 rounded-full border-2 border-gray-200 shadow-sm">
+          <span class="text-sm mt-1 text-gray-600">সজল</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Counter animation -->
+<script>
+const counters = document.querySelectorAll('.counter');
+counters.forEach(counter => {
+  const update = () => {
+    const target = +counter.dataset.target;
+    const count = +counter.innerText;
+    const step = Math.ceil(target / 50);
+    if (count < target) {
+      counter.innerText = count + step;
+      setTimeout(update, 40);
+    } else {
+      counter.innerText = target;
+    }
+  };
+  update();
+});
+</script>
+
+<!-- Progress animation -->
+<script>
+document.querySelectorAll('.fade-in svg circle:nth-child(2)').forEach((circle, i) => {
+  const percentages = [80, 40, 20];
+  const percent = percentages[i] || 0;
+  circle.style.strokeDashoffset = 283 - (283 * percent / 100);
+});
+</script>
+{% endblock %}

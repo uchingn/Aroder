@@ -1,0 +1,354 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Arad{% endblock %}</title>
+    {% load static %}
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-pap+qkF7k8VnQX2xgq6U6t2x6x9Xv3pK0JVVz5lB8lEJ+5ZK+slVjkfCzRJZivvfi6wF6E2/bfR6+/KKP+E5iQ=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="icon" type="image/x-icon"
+      href="{% static 'images/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    {% block head %}{% endblock %}
+
+    <style>
+    
+    .bottom-nav {
+        box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06);
+    } 
+    /* Heart click animation */
+.heart-pop {
+  animation: pop 0.3s ease forwards;
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(1.5); }
+  75% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+  </style>
+  </head>
+  <body class="flex flex-col min-h-screen">
+
+    <nav class="navbar bg-white shadow-md fixed w-full z-50 ">
+      <div class="flex items-center justify-around px-4 p-4 gap-4 w-full">
+
+        <div id="logoText" class="text-green-500  text-xl font-bold">
+            
+            <img class="h-12  w-12 rounded-full"
+              src="{% static 'images/logo.png' %}" alt> <span class="text-green-500  text-xl font-bold">আরদ</span> 
+         </div>
+<form method="POST">
+    {% csrf_token %}
+        <div class="flex-grow max-w-lg relative mx-12 md:block">
+          <input id="searchInput" name="findingproduct" type="text"
+            placeholder=" খুঁজুন"
+            data-i18n="search"
+            class="w-full pr-12 pl-4 py-2 rounded-lg bg-blue-100 text-green-500 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <button type="submit"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-green-500">
+            <i class="fas fa-search text-xl"></i>
+          </button>
+        </div>
+</form>
+ 
+        <div class="flex items-center gap-4">
+
+          <button id="mobile-menu-btn" class="md:hidden flex items-center justify-center w-8 h-8 focus:outline-none">
+            <i id="menuIcon" class="fas fa-bars text-green-500 text-2xl"></i>
+          </button>
+
+          <div id="menu-items" id="show-menu"
+            class="hidden text-black sm:flex flex-col  md:flex items-center   gap-4 flex-col md:flex-row absolute md:static top-full left-0 w-full md:w-auto bg-white md:bg-transparent border-t md:border-none shadow md:shadow-none p-4 md:p-0 transition-all duration-300">
+            <div class="flex   md:flex   justify-around items-center gap-4">
+              <div class="relative">
+                <a href="#"
+                  class="flex items-center justify-center h-10 w-10 text-green-500 hover:text-green-500 relative">
+                  <i class="fas fa-shopping-cart text-xl"></i>
+                  <!-- Purple badge -->
+                  <span class="absolute -top-1 -right-1 bg-purple-700 text-white text-xs p-2 font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    100
+                  </span>
+                </a>
+              </div>
+
+            <div>
+              <a href="#" id="likeBtn" class="flex items-center justify-center h-10 w-10 text-green-500 hover:text-green-500">
+                <i class="fas fa-heart text-xl transition-colors duration-300"></i>
+              </a>
+            </div>
+
+
+ 
+  <!-- <audio id="likeSound" src="{% static 'audio/pop.mp3' %}" preload="auto"></audio> -->
+
+              <div class="relative bg-">
+                <a href="#" id="profileToggle"
+                  class="flex items-center justify-center h-10 w-10 text-green-500 hover:text-green-500">
+                  <i class="fas fa-cog text-xl"></i>
+                </a>
+                <div id="profileDropdown"
+                  class="absolute bg-gray-300 right-0 mt-2 w-32 bgnav gap-2 shadow-lg rounded-md hidden">
+                  <button id="langToggle"
+                    class="w-full px-3 py-1 rounded-md text-lg font-medium bgnav hover:bgnav text-green-700 font-bold">
+                    বাংলা
+                  </button>
+                  <a href="{% url 'logout' %}"
+                    class="block text-center px-3 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
+                  <a id="theme-toggle" href="#"
+                    class="block text-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded">
+                    <i id="theme-icon" class="fa-solid fa-moon"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="relative">
+                <a href="#"
+                  class="flex items-center justify-center h-10 w-10 text-green-500 hover:text-green-500 relative">
+                  <i class="fas fa-bell text-xl"></i>
+                  <!-- Red badge -->
+                  <span class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    5
+                  </span>
+                </a>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </nav>
+    <main>
+      {% block body %}{% endblock %}
+    </main>
+
+    <nav
+      class="navbar fixed bottom-0 left-0 right-0 bg-white p-3 flex justify-around text-green-500 items-center border-t border-gray-200 shadow-lg ">
+      <a href="{% url 'product' %}"
+        class="relative flex flex-col items-center justify-center text-green-500 group focus:outline-none">
+        <span
+          class="absolute bottom-0 w-12 h-12 rounded-full border-2 border-gray-300 bg-white opacity-0 
+                     transform scale-90 transition-all duration-500 ease-out
+                     group-focus:opacity-100 group-focus:-translate-y-8"></span>
+        <i
+          class="fas fa-home text-xl relative transition-transform duration-500 
+                  group-focus:-translate-y-4 group-focus:text-green-600"></i>
+        <span class="text-sm mt-1 transition-colors duration-300"
+          data-i18n="home">হোম</span>
+      </a>
+
+      <a href="{% url 'category_products' %}"
+        class="relative flex flex-col items-center justify-center text-green-500 group focus:outline-none">
+        <span
+          class="absolute bottom-0 w-12 h-12 rounded-full border-2 border-gray-300 bg-white opacity-0 
+                     transform scale-90 transition-all duration-500 ease-out
+                     group-focus:opacity-100 group-focus:-translate-y-8"></span>
+        <i
+          class="fas fa-th-large text-xl relative transition-transform duration-500 
+                  group-focus:-translate-y-4 group-focus:text-green-600"></i>
+        <span class="text-sm mt-1 transition-colors duration-300"
+          data-i18n="categories">ক্যাটাগরি</span>
+      </a>
+     <a href=" "
+   class="relative flex flex-col items-center justify-center text-green-500 group focus:outline-none">
+  <span
+    class="absolute bottom-0 w-12 h-12 rounded-full border-2 border-gray-300 bg-white opacity-0 
+           transform scale-90 transition-all duration-500 ease-out
+           group-focus:opacity-100 group-focus:-translate-y-8">
+  </span>
+  <i class="fas fa-calculator text-xl relative transition-transform duration-500 
+             group-focus:-translate-y-4 group-focus:text-green-600"></i>
+  <span class="text-sm mt-1 transition-colors duration-300 group-focus:text-green-600">
+    ক্যালকুলেটর
+  </span>
+</a>
+
+      <a href="{% url 'list_populer_product' %}"
+        class="relative flex flex-col items-center justify-center text-green-500 group focus:outline-none">
+        <span
+          class="absolute bottom-0 w-12 h-12 rounded-full border-2 border-gray-300 bg-white opacity-0 
+                     transform scale-90 transition-all duration-500 ease-out
+                     group-focus:opacity-100 group-focus:-translate-y-8"></span>
+        <i
+          class="fas fa-question-circle text-xl relative transition-transform duration-500 
+                  group-focus:-translate-y-4 group-focus:text-green-600"></i>
+        <span class="text-sm mt-1 transition-colors duration-300"
+          data-i18n="help">সাহায্য</span>
+      </a>
+
+      <a href="{% url 'register' %}"
+        class="relative flex flex-col items-center justify-center text-green-500 group focus:outline-none">
+        <span
+          class="absolute bottom-0 w-12 h-12 rounded-full border-2 border-gray-300 bg-white opacity-0 
+                     transform scale-90 transition-all duration-500 ease-out
+                     group-focus:opacity-100 group-focus:-translate-y-8"></span>
+        <i
+          class="fas fa-user-circle text-xl relative transition-transform duration-500 
+                  group-focus:-translate-y-4 group-focus:text-green-600"></i>
+        <span class="text-sm mt-1 transition-colors duration-300"
+          data-i18n="profile">প্রোফাইল</span>
+      </a>
+    </nav>
+<script>
+   
+  const translations = {
+    en: { 
+      logoText:"Arad", 
+      searchInput:"Search for products, buyers, or exchanges", 
+      home:"Home", 
+      categories:"Categories", 
+      help:"Help", 
+      profile:"Profile",
+      Activitystatus:"Your Activity Status", 
+      search: "Search for products, buyers, or exchanges",
+    },
+    bn: { 
+      logoText:"আরদ", 
+      searchInput:"প্রোডাক্ট, ক্রেতা অথবা এক্সচেঞ্জ খুঁজুন", 
+      home:"হোম", 
+      categories:"ক্যাটাগরি", 
+      help:"সাহায্য", 
+      profile:"প্রোফাইল", 
+      Activitystatus:"আপনার কার্যকলাপের অবস্থা", 
+      search: "প্রোডাক্ট, ক্রেতা অথবা এক্সচেঞ্জ খুঁজুন",
+    }
+  };
+
+  let currentLang = "en";
+
+  // Language toggle
+  const langToggleBtn = document.getElementById("langToggle");
+  langToggleBtn.addEventListener("click", () => {
+    currentLang = currentLang === "en" ? "bn" : "en";
+    const dict = translations[currentLang];
+
+    // Update elements with IDs
+    for (const key in dict) {
+      const el = document.getElementById(key);
+      if (el) el.textContent = dict[key];
+    }
+
+    // Update elements with data-i18n
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      if (dict[key]) {
+        if (el.tagName === "INPUT") {
+          el.setAttribute("placeholder", dict[key]);
+        } else {
+          el.textContent = dict[key];
+        }
+      }
+    });
+
+    langToggleBtn.textContent = currentLang === "en" ? "বাংলা" : "English";
+  });
+
+  // Profile dropdown toggle
+  const profileToggle = document.getElementById('profileToggle');
+  const profileDropdown = document.getElementById('profileDropdown');
+
+  profileToggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    profileDropdown.classList.toggle('hidden');
+  });
+
+  window.addEventListener('click', e => {
+    if(!profileToggle.contains(e.target) && !profileDropdown.contains(e.target)) {
+      profileDropdown.classList.add('hidden');
+    }
+  });
+
+  // Mobile menu toggle
+  const mobileBtn = document.getElementById('mobile-menu-btn');
+  const menuItems = document.getElementById('menu-items');
+  const menuIcon = document.getElementById('menuIcon');
+  // const mddisplay=document.getElementById('show-menu');
+  
+  mobileBtn.addEventListener('click', () => {
+    menuItems.classList.toggle('hidden');
+    // mddisplay.classList.toggle('hidden');
+
+    // Toggle icon bars/times
+    menuIcon.classList.toggle('fa-bars');
+    menuIcon.classList.toggle('fa-times');
+  });
+
+
+   
+  window.addEventListener('resize', () => {
+    if(window.innerWidth >= 768) { // md breakpoint
+      menuItems.classList.remove('hidden');
+      // mddisplay.classList.remove('hidden');
+      menuIcon.classList.add('fa-bars');
+      menuIcon.classList.remove('fa-times');
+    } else {
+      menuItems.classList.add('hidden');
+      // mddisplay.classList.add('hidden');
+    }
+  });
+ 
+
+   
+  const toggleBtn = document.getElementById("theme-toggle");
+  const icon = document.getElementById("theme-icon");
+  const body = document.body;
+
+  toggleBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    // Toggle dark mode class on <body>
+    body.classList.toggle("dark-mode");
+
+    // Switch icon
+    if (body.classList.contains("dark-mode")) {
+      icon.classList.remove("fa-moon");
+      icon.classList.add("fa-sun");
+      body.style.backgroundColor = "#1f2937"; // Tailwind gray-800
+      body.style.color = "#f9fafb"; // text-gray-50
+    } else {
+      icon.classList.remove("fa-sun");
+      icon.classList.add("fa-moon");
+      body.style.backgroundColor = "#f0fdfa"; // light green
+      body.style.color = "#111827"; // text-gray-900
+    }
+  });
+ 
+
+   
+ const likeBtn = document.getElementById('likeBtn');
+const likeIcon = likeBtn.querySelector('i');
+
+likeBtn.addEventListener('click', function(e) {
+  e.preventDefault();
+
+  // Toggle red color
+  likeIcon.classList.toggle('text-red-500');
+
+  // Add pop animation
+  likeIcon.classList.add('heart-pop');
+  setTimeout(() => {
+    likeIcon.classList.remove('heart-pop');
+  }, 3000);
+});
+document.getElementById('notification-count').textContent = 5;
+</script>
+<script src="{% static 'js/mainjs.js' %}"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> 
+  </body>
+
+</html>

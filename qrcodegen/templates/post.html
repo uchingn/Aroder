@@ -1,0 +1,22 @@
+ 
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% block head %}
+
+{% endblock %}
+
+{% block title %} POST {% endblock %}
+
+{% block body %}
+ 
+  <div class="my-32">
+      <h1 class="text-black">Post page for Anounsment</h1>
+       {{ form.media }} 
+    <form action="" method="post">
+         {% csrf_token %}
+            {{form.as_p}}
+        <input type="submit" value="Submit">
+    </form>
+ 
+  </div>
+{% endblock %}

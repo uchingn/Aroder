@@ -1,0 +1,39 @@
+django-admin startproject Efarmershop
+sudo apt update
+sudo apt install python3-django
+django-admin startproject Efarmershop
+python3 manage.py startapp market
+
+
+#############################################################
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'market/templates'],  # add this line
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+######################################################################3
+
+
+#####################  main project urls $%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('market.urls')),  # make home page point to market app
+]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

@@ -1,0 +1,192 @@
+{% extends 'homeAddmin/home.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% block head %}
+    
+    <style>
+        body {
+            font-family: 'Noto Sans Bengali', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8, #c8d9e6); /* Soft gradient background */
+        }
+        .input-focus-glow:focus {
+            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.5); /* Indigo-400 glow */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        .btn-animation:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(49, 46, 129, 0.2); /* Deeper shadow on hover */
+        }
+        .btn-animation:active {
+            transform: scale(0.98);
+        }
+    </style>
+
+{% endblock %}
+
+{% block title %} লগইন করুন 🔑 {% endblock %}
+{% block body %}
+
+<div class="flex items-center justify-center min-h-screen py-32 bg-gray-100">
+
+    <div class="w-full max-w-md bg-white shadow-xl rounded-2xl overflow-hidden animate-fade-in">
+        <div class="p-8 md:p-10">
+
+            <div class="text-center mb-8">
+                <span class="text-5xl mb-4 block">👋</span>
+                <h2 class="text-4xl font-extrabold text-gray-800 mb-2">
+                    স্বাগতম! লগইন করুন
+                </h2>
+                <p class="text-gray-500 text-lg">
+                    আপনার অ্যাকাউন্টে প্রবেশ করুন
+                </p>
+            </div>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div id="messagesettime" 
+                            class="mb-4 p-4 rounded-lg 
+                            {% if message.tags == 'success' %}bg-green-100 text-green-800 
+                                {% elif message.tags == 'error' %}bg-red-100 text-red-800 
+                                {% else %}bg-blue-100 text-blue-800{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            <form action="#" method="POST" class="space-y-6">
+                     {% csrf_token %}
+              
+                <div>
+                    <select name="user_type" id="user_type" class="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 input-focus-glow" required>
+                        <option disabled selected value="">ব্যবহারকারীর ধরন নির্বাচন করুন</option>
+                        <option value="customer">ক্রেতা</option>
+                        <option value="seller">বিক্রেতা</option>
+                        <option value="delivery_person">ডেলিভারি পার্সন</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">
+                        ফোন নম্বর 📞
+                    </label>
+                    <input type="text" id="phone" name="phone" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 input-focus-glow"
+                           placeholder="আপনার ফোন নম্বর দিন">
+                </div>
+
+                <!-- Password with eye toggle -->
+                <div class="relative">
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+                        পাসওয়ার্ড 🔒
+                    </label>
+                    <input type="password" id="password" name="password" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 input-focus-glow pr-12"
+                           placeholder="আপনার পাসওয়ার্ড লিখুন">
+
+                    <!-- Eye icon -->
+                    <button type="button" id="togglePassword" 
+                            class="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-indigo-600 focus:outline-none"
+                            style="top: 32px;">
+                        <i id="eyeIcon" class="fas fa-eye"></i>
+                    </button>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember_me" name="remember_me" type="checkbox"
+                               class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        <label for="remember_me" class="ml-2 block text-sm text-gray-900">
+                            আমাকে মনে রাখুন 🤔
+                        </label>
+                    </div>
+
+                    <div class="text-sm">
+                        <a id="forgot_password" href="#" class="font-medium text-indigo-600 hover:text-indigo-500 hover:underline transition duration-150">
+                            পাসওয়ার্ড ভুলে গেছেন? 🤷
+                        </a>
+                        <a id="recovery" href="#" class="hidden font-medium text-indigo-600 hover:text-indigo-500 hover:underline transition duration-150">
+                            admin  যোগাযোগ করুন
+                        </a>
+                    </div>
+                </div>
+
+             <div class="pt-2">
+                <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-lg font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 ease-in-out btn-animation">
+                    লগইন করুন ✨
+                    </button>
+            </div>
+
+
+            </form>
+
+            <div class="mt-8 text-center">
+                <p class="text-sm text-gray-600">
+                    নতুন অ্যাকাউন্ট খুলতে চান? 🚀
+                    <a href="{% url 'register' %}" class="font-medium text-indigo-600 hover:text-indigo-500 hover:underline transition duration-150">
+                        রেজিস্টার করুন
+                    </a>
+                </p>
+            </div>
+
+            <div class="mt-8 text-center">
+                <p class="text-lg text-gray-700">
+                    অথবা, এগুলোর মাধ্যমে লগইন করুন:
+                </p>
+                <div class="flex justify-center space-x-4 mt-4">
+                    <button class="social-login-btn">
+                        <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google" class="w-8 h-8"/>
+                    </button>
+                    <button class="social-login-btn">
+                        <img src="https://img.icons8.com/fluency/48/000000/facebook-new.png" alt="Facebook" class="w-8 h-8"/>
+                    </button>
+                    <button class="social-login-btn">
+                        <img src="https://img.icons8.com/fluency/48/000000/apple-logo.png" alt="Apple" class="w-8 h-8"/>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<!-- <script>
+
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordInput = document.getElementById('password');
+  const eyeIcon = document.getElementById('eyeIcon');
+
+  togglePassword.addEventListener('click', () => {
+    const isPassword = passwordInput.type === 'password';
+    passwordInput.type = isPassword ? 'text' : 'password';
+    eyeIcon.classList.toggle('fa-eye');
+    eyeIcon.classList.toggle('fa-eye-slash');
+  });
+ 
+ 
+    const forgotPasswordLink = document.getElementById('forgot_password');
+    const recoveryLink = document.getElementById('recovery');
+    
+    forgotPasswordLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (forgotPasswordLink.classList.contains('hidden')) {
+            return;
+        }else{
+            recoveryLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                 recoveryLink.textContent = "যোগাযোগ করুন: 01865650309 ";
+               })
+        }
+        forgotPasswordLink.classList.add('hidden');
+        recoveryLink.classList.remove('hidden');
+
+    });
+
+
+</script> -->
+<script src="{% static 'js/mainjs.js' %}"></script>
+{% endblock %}
++

@@ -1,0 +1,103 @@
+{% extends 'homeAddmin/home.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% block head %}
+<style>
+    
+    .skill-bar { height: 8px; border-radius: 9999px; width: 0; transition: width 1s ease-in-out; }
+    .skill-bar-bg { background-color: #e2e8f0; }
+    .ps-bar { background-color: #3182ce; }
+    .ai-bar { background-color: #d69e2e; }
+    .ae-bar { background-color: #a0aec0; }
+</style>
+{% endblock %}
+
+{% block title %} buyers {% endblock %}
+{% block body %}
+ 
+
+<div class="flex h-screen overflow-hidden my-32">
+
+  <div class="flex-1 flex flex-col overflow-hidden">
+
+    <!-- Main -->
+    <main class="p-4 md:p-6 overflow-y-auto pb-20">
+
+      <div class="togolcol rounded-lg shadow-md mb-6 mt-14">
+       
+       <div class="h-40 rounded-t-lg relative"
+     style="background-image: url('{% static 'images/back.jpg' %}'); background-size: cover; background-position: center;">
+    
+    <!-- Centered profile image -->
+    <div class="absolute bottom-40 left-1/2 transform -translate-x-1/2 translate-y-1/2">
+        <img src="{% static 'images/about.png' %}"  
+             class="w-36 h-36 rounded-full border-4 bg-gray-200 shadow-lg" alt="Profile">
+    </div>
+</div>
+
+        <div
+          class="p-6 flex flex-col md:flex-row justify-between items-start md:items-end">
+          <div class="text-center md:text-left">
+            <h1 class="text-2xl font-bold text-gray-900">uching</h1>
+            <p class="text-sm text-gray-500">Web Developer</p>
+          </div>
+          <div
+            class="mt-4 md:mt-0 flex justify-center md:justify-start space-x-2">
+            <a href="#"
+              class="inline-block p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">FB</a>
+            <a href="#"
+              class="inline-block p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">TW</a>
+            <a href="#"
+              class="inline-block p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">IG</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="lg:col-span-4 togolcol rounded-lg shadow-md p-6">
+          <h2 class="text-xl font-semibold mb-4 text-gray-700">My Current
+            Skill</h2>
+          <div class="flex gap-6">
+            <!-- Photoshop Circle -->
+            <div
+              class="relative w-24 h-24 rounded-full flex items-center justify-center"
+              style="background: conic-gradient(#4ade80 0% 75%, #e5e7eb 0% 100%);">
+              <span
+                class="absolute text-gray-700 font-bold text-sm">Ps</span>
+            </div>
+            <!-- Illustrator Circle -->
+            <div
+              class="relative w-24 h-24 rounded-full flex items-center justify-center"
+              style="background: conic-gradient(#facc15 0% 60%, #e5e7eb 0% 100%);">
+              <span
+                class="absolute text-gray-700 font-bold text-sm">Ai</span>
+            </div>
+            <!-- After Effects Circle -->
+            <div
+              class="relative w-24 h-24 rounded-full flex items-center justify-center"
+              style="background: conic-gradient(#60a5fa 0% 90%, #e5e7eb 0% 100%);">
+              <span
+                class="absolute text-gray-700 font-bold text-sm">Ae</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+        <div class="togolcol rounded-lg shadow-md p-4 text-center">
+          <p class="text-xl font-bold">120</p>
+          <p class="text-sm text-gray-500">Follower</p>
+        </div>
+        <div class="togolcol rounded-lg shadow-md p-4 text-center">
+          <p class="text-xl font-bold">3</p>
+          <p class="text-sm text-gray-500">Total Win</p>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+</div>
+<script src="{% static 'js/mainjs.js' %}"></script>
+{% endblock %}

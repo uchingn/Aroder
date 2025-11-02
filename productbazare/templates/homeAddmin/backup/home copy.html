@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Efarmers</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f7fafc; }
+
+        .bottom-nav {
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06);
+        } 
+        
+        </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+<!-- ✅ Top Navbar -->
+<nav class="bg-gray-800 shadow-md fixed w-full z-50">
+  <div class="flex items-center justify-between p-4">
+    <!-- Logo -->
+    <div id="logoText" class="text-white text-2xl font-bold">Efarmers</div>
+
+     
+<div class="flex-grow max-w-md mx-4 w-full">
+  <div class="relative w-full">
+    <input id="searchInput" type="text" 
+           placeholder="Search for products "
+           class="w-full pr-12 pl-4 py-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+    <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+      <i class="fas fa-search text-xl"></i>
+    </button>
+  </div>
+</div>
+<button id="mobile-menu-btn" class="md:hidden flex items-center justify-center w-6 h-6 focus:outline-none">
+  <i class="fas fa-bars text-green-700 text-xl"></i>
+</button>
+
+
+   <div   id="menu-items" class="hidden md:flex items-center gap-4 flex-col md:flex-row absolute md:static top-full left-0 w-full md:w-auto bg-white md:bg-transparent border-t md:border-none shadow md:shadow-none"
+ >
+    <!-- class="relative flex items-center space-x-4" -->
+  <a href="#" class="relative flex items-center justify-center h-10 w-10 text-white hover:text-green-500">
+    <i class="fas fa-shopping-cart text-xl"></i>
+  </a>
+  <a href="#" class="relative flex items-center justify-center h-10 w-10 text-white hover:text-green-500">
+    <i class="fas fa-bell text-xl"></i>
+  </a>
+ 
+  <div class="relative">
+    <a href="#" id="profileToggle" class="relative flex items-center justify-center h-10 w-10 text-white hover:text-green-500">
+      <i class="far fa-user-circle text-xl"></i>
+    </a>
+
+    <!-- Dropdown Menu -->
+    <div id="profileDropdown" class="absolute right-0 mt-2 w-32 bg-white gap-2 shadow-lg rounded-md hidden">
+      <a href="#">
+        <button id="langToggle" class="w-full px-3 py-1 rounded-md text-sm font-medium bg-green-600 hover:bg-green-700 text-white">
+          বাংলা
+        </button>
+      </a>
+      <a href="#">Logout</a>
+      <!-- You can add more options here -->
+    </div>
+  </div>
+</div>
+  </div>
+</nav>
+
+<!-- ✅ Main Content -->
+<main class="flex-grow container mx-auto p-4 pt-28 pb-28 md:pt-24">
+
+  <!-- Hero Section -->
+  <section class="relative bg-gray-200 h-64 rounded-lg overflow-hidden mb-8 flex items-center justify-center">
+    <img src="https://via.placeholder.com/1200x400?text=Manage+Your+Listings+and+Connect+with+Buyers" 
+         alt="Hero Banner" class="absolute inset-0 w-full h-full object-cover">
+    <div class="relative z-10 text-center text-white p-6 bg-black bg-opacity-40 rounded-lg">
+      <h1 id="heroTitle" class="text-4xl font-bold mb-4">Manage Your Listings & Connect with Buyers</h1>
+      <button id="dashboardBtn" 
+              class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full text-lg shadow-lg">
+        View Dashboard
+      </button>
+    </div>
+  </section>
+
+  <!-- Buyers Section -->
+  <section>
+    <h2 id="buyersHeading" class="text-2xl font-semibold mb-6 text-gray-800">Potential Buyers</h2>
+    <div class="bg-white rounded-lg shadow-md p-4 space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="font-semibold text-gray-800">Olivia Chen</h3>
+          <p id="buyer1Text" class="text-gray-600 text-sm">Looking for: Vintage Cameras</p>
+        </div>
+        <button id="msgBtn1" class="bg-blue-500 hover:bg-blue-600 text-white text-sm py-2 px-4 rounded-full">Message</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Listings Section -->
+  <section class="mt-8">
+    <h2 id="listingsHeading" class="text-2xl font-semibold mb-6 text-gray-800">Your Exchange Listings</h2>
+    <div class="bg-white rounded-lg shadow-md p-4">
+      <h3 class="font-semibold text-gray-800 text-sm">My Vintage Camera</h3>
+      <p id="swapText" class="text-gray-600 text-xs mt-1">Swap for: Drone</p>
+    </div>
+  </section>
+
+  <!-- Account Performance -->
+  <section class="mt-8 bg-white p-6 rounded-lg shadow-md">
+    <h2 id="accPerfHeading" class="text-xl font-semibold text-gray-800 mb-2">Account Performance</h2>
+    <p id="accPerfText" class="text-gray-600">Your current rating: <span class="font-bold text-green-600">85% Positive Feedback</span></p>
+    <button id="createListingBtn" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+      Create New Listing
+    </button>
+  </section>
+
+</main>
+
+ <nav class="bottom-nav fixed bottom-0 left-0 right-0 bg-white p-3 flex justify-around items-center border-t border-gray-200 shadow-lg ">
+    <!-- Home -->
+    <a href="#" class="relative flex flex-col items-center justify-center text-gray-600 group focus:outline-none">
+        <span class="absolute bottom-0 w-12 h-12 rounded-full border-2 border-gray-300 bg-white opacity-0 
+                     transform scale-90 transition-all duration-500 ease-out
+                     group-focus:opacity-100 group-focus:-translate-y-8"></span>
+        <i class="fas fa-home text-xl relative transition-transform duration-500 
+                  group-focus:-translate-y-4 group-focus:text-green-600"></i>
+        <span class="text-sm mt-1 transition-colors duration-300
+                     group-focus:text-green-600" data-i18n="home">Home</span>
+    </a>
+
+    <!-- Categories -->
+    <a href="#" class="relative flex flex-col items-center justify-center text-gray-600 group focus:outline-none">
+        <span class="absolute bottom-0 w-12 h-12 rounded-full border-2 border-gray-300 bg-white opacity-0 
+                     transform scale-90 transition-all duration-500 ease-out
+                     group-focus:opacity-100 group-focus:-translate-y-8"></span>
+        <i class="fas fa-th-large text-xl relative transition-transform duration-500 
+                  group-focus:-translate-y-4 group-focus:text-green-600"></i>
+        <span class="text-sm mt-1 transition-colors duration-300
+                     group-focus:text-green-600" data-i18n="categories">Categories</span>
+    </a>
+
+    <!-- Help -->
+    <a href="#" class="relative flex flex-col items-center justify-center text-gray-600 group focus:outline-none">
+        <span class="absolute bottom-0 w-12 h-12 rounded-full border-2 border-gray-300 bg-white opacity-0 
+                     transform scale-90 transition-all duration-500 ease-out
+                     group-focus:opacity-100 group-focus:-translate-y-8"></span>
+        <i class="fas fa-question-circle text-xl relative transition-transform duration-500 
+                  group-focus:-translate-y-4 group-focus:text-green-600"></i>
+        <span class="text-sm mt-1 transition-colors duration-300
+                     group-focus:text-green-600" data-i18n="help">Help</span>
+    </a>
+
+    <!-- Settings -->
+    <a href="#" class="relative flex flex-col items-center justify-center text-gray-600 group focus:outline-none">
+        <span class="absolute bottom-0 w-12 h-12 rounded-full border-2 border-gray-300 bg-white opacity-0 
+                     transform scale-90 transition-all duration-500 ease-out
+                     group-focus:opacity-100 group-focus:-translate-y-8"></span>
+        <i class="fas fa-cog text-xl relative transition-transform duration-500 
+                  group-focus:-translate-y-4 group-focus:text-green-600"></i>
+        <span class="text-sm mt-1 transition-colors duration-300
+                     group-focus:text-green-600" data-i18n="settings">Settings</span>
+    </a>
+
+    <!-- Profile -->
+    <a href="#" class="relative flex flex-col items-center justify-center text-gray-600 group focus:outline-none">
+        <span class="absolute bottom-0 w-12 h-12 rounded-full border-2 border-gray-300 bg-white opacity-0 
+                     transform scale-90 transition-all duration-500 ease-out
+                     group-focus:opacity-100 group-focus:-translate-y-8"></span>
+        <i class="fas fa-user-circle text-xl relative transition-transform duration-500 
+                  group-focus:-translate-y-4 group-focus:text-green-600"></i>
+        <span class="text-sm mt-1 transition-colors duration-300
+                     group-focus:text-green-600" data-i18n="profile">Profile</span>
+    </a>
+</nav>
+
+
+<script>
+  // Translation dictionary
+  const translations = {
+    en: {
+      logoText: "Efarmers",
+      searchInput: "Search for products, buyers, or exchanges",
+      heroTitle: "Manage Your Listings & Connect with Buyers",
+      dashboardBtn: "View Dashboard",
+      buyersHeading: "Potential Buyers",
+      buyer1Text: "Looking for: Vintage Cameras",
+      msgBtn1: "Message",
+      listingsHeading: "Your Exchange Listings",
+      swapText: "Swap for: Drone",
+      accPerfHeading: "Account Performance",
+      accPerfText: "Your current rating: 85% Positive Feedback",
+      createListingBtn: "Create New Listing",
+
+      // ✅ Bottom Nav
+      home: "Home",
+      categories: "Categories",
+      help: "Help",
+      settings: "Settings",
+      profile: "Profile",
+    },
+    bn: {
+      logoText: "ইফার্মারস",
+      searchInput: "প্রোডাক্ট, ক্রেতা অথবা এক্সচেঞ্জ খুঁজুন",
+      heroTitle: "আপনার লিস্টিং পরিচালনা করুন ও ক্রেতাদের সাথে সংযুক্ত হোন",
+      dashboardBtn: "ড্যাশবোর্ড দেখুন",
+      buyersHeading: "সম্ভাব্য ক্রেতারা",
+      buyer1Text: "প্রয়োজন: ভিন্টেজ ক্যামেরা",
+      msgBtn1: "বার্তা",
+      listingsHeading: "আপনার এক্সচেঞ্জ লিস্টিং",
+      swapText: "বিনিময়: ড্রোন",
+      accPerfHeading: "অ্যাকাউন্ট পারফরম্যান্স",
+      accPerfText: "আপনার বর্তমান রেটিং: ৮৫% ইতিবাচক মতামত",
+      createListingBtn: "নতুন লিস্টিং তৈরি করুন",
+
+      // ✅ Bottom Nav
+      home: "হোম",
+      categories: "ক্যাটাগরি",
+      help: "সাহায্য",
+      settings: "সেটিংস",
+      profile: "প্রোফাইল",
+    }
+  };
+
+  let currentLang = "en";
+
+  document.getElementById("langToggle").addEventListener("click", () => {
+    currentLang = currentLang === "en" ? "bn" : "en";
+    const dict = translations[currentLang];
+
+    // ✅ Update elements with IDs
+    for (const key in dict) {
+      const el = document.getElementById(key);
+      if (el) {
+        if (key === "searchInput") {
+          el.placeholder = dict[key]; // input placeholder
+        } else {
+          el.textContent = dict[key];
+        }
+      }
+    }
+
+    // ✅ Update bottom nav (data-i18n elements)
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      if (dict[key]) {
+        el.textContent = dict[key];
+      }
+    });
+
+    // ✅ Toggle button text
+    document.getElementById("langToggle").textContent =
+      currentLang === "en" ? "বাংলা" : "English";
+  });
+</script>
+
+<script>
+  const profileToggle = document.getElementById('profileToggle');
+  const profileDropdown = document.getElementById('profileDropdown');
+
+  profileToggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    profileDropdown.classList.toggle('hidden');
+  });
+
+  // Optional: hide dropdown if clicking outside
+  window.addEventListener('click', (e) => {
+    if (!profileToggle.contains(e.target) && !profileDropdown.contains(e.target)) {
+      profileDropdown.classList.add('hidden');
+    }
+  });
+</script>
+</body>
+</html>

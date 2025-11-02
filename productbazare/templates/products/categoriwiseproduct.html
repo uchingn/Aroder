@@ -1,0 +1,219 @@
+{% extends 'homeAddmin/home.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% block head %}
+    
+{% endblock %}
+
+{% block title %} Product Category {% endblock %}
+{% block body %}
+<div class="bg-gray-100 font-sans  py-20">
+
+  
+<div class="max-w-7xl mx-auto flex flex-col lg:flex-row mt-4 gap-4 px-2">
+
+  <!-- Sidebar -->
+  <aside class="w-full lg:w-1/4 space-y-4 lg:sticky lg:top-4 h-fit">
+
+    <!-- Category List -->
+    <div class="bg-white shadow rounded-lg p-4">
+      <h2 class="font-bold text-lg mb-3 text-green-700">সবজি বিভাগ</h2>
+      <ul class="space-y-1">
+        <li><button onclick="filterProducts('leafy')" class="w-full text-left block px-2 py-1.5 rounded hover:bg-green-50 hover:text-green-700 transition">পাতাওয়ালা সবজি</button></li>
+        <li><button onclick="filterProducts('flower')" class="w-full text-left block px-2 py-1.5 rounded hover:bg-green-50 hover:text-green-700 transition">ফুল সবজি</button></li>
+        <li><button onclick="filterProducts('root')" class="w-full text-left block px-2 py-1.5 rounded hover:bg-green-50 hover:text-green-700 transition">মূল সবজি</button></li>
+        <li><button onclick="filterProducts('dal')" class="w-full text-left block px-2 py-1.5 rounded hover:bg-green-50 hover:text-green-700 transition">ডাল জাতীয়</button></li>
+        <li><button onclick="filterProducts('spice')" class="w-full text-left block px-2 py-1.5 rounded hover:bg-green-50 hover:text-green-700 transition">গাছগাছালি ও মসলা</button></li>
+        <li><button onclick="filterProducts('mushroom')" class="w-full text-left block px-2 py-1.5 rounded hover:bg-green-50 hover:text-green-700 transition">মাশরুম</button></li>
+        <li><button onclick="filterProducts('fruit')" class="w-full text-left block px-2 py-1.5 rounded hover:bg-green-50 hover:text-green-700 transition">ফল</button></li>
+        <li><button onclick="filterProducts('tuber')" class="w-full text-left block px-2 py-1.5 rounded hover:bg-green-50 hover:text-green-700 transition">কন্দজাতীয়</button></li>
+        <li><button onclick="filterProducts('all')" class="w-full text-left block px-2 py-1.5 rounded bg-green-600 text-white">সব দেখুন</button></li>
+      </ul>
+    </div>
+
+    <!-- Cooking Tips -->
+    <div class="bg-green-100 p-4 rounded-lg text-center shadow">
+      <h2 class="font-bold text-base mb-2 text-green-800">সবজি রান্নার টিপস</h2>
+      <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-1.5 rounded-md shadow transition">
+        দেখুন
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- Products -->
+  <main class="w-full lg:w-3/4 space-y-4">
+
+    <section class="bg-white shadow rounded-lg p-4">
+      <h2 class="text-xl font-bold mb-4 text-green-700">প্রোডাক্টস</h2>
+      <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        
+        <!-- Example Products -->
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="fruit">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="আঙুর" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">আঙুর</h3>
+          <p class="text-green-600 font-bold mt-1">$13.50</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="flower">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="ক্যাপসিকাম" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">ক্যাপসিকাম</h3>
+          <p class="text-green-600 font-bold mt-1">$12.00</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="leafy">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="পালং শাক" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">পালং শাক</h3>
+          <p class="text-green-600 font-bold mt-1">$8.50</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="root">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="বেগুন" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">বেগুন</h3>
+          <p class="text-green-600 font-bold mt-1">$9.00</p>
+        </div>
+         <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="fruit">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="আঙুর" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">আঙুর</h3>
+          <p class="text-green-600 font-bold mt-1">$13.50</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="flower">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="ক্যাপসিকাম" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">ক্যাপসিকাম</h3>
+          <p class="text-green-600 font-bold mt-1">$12.00</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="leafy">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="পালং শাক" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">পালং শাক</h3>
+          <p class="text-green-600 font-bold mt-1">$8.50</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="root">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="বেগুন" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">বেগুন</h3>
+          <p class="text-green-600 font-bold mt-1">$9.00</p>
+        </div>
+         <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="fruit">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="আঙুর" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">আঙুর</h3>
+          <p class="text-green-600 font-bold mt-1">$13.50</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="flower">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="ক্যাপসিকাম" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">ক্যাপসিকাম</h3>
+          <p class="text-green-600 font-bold mt-1">$12.00</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="leafy">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="পালং শাক" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">পালং শাক</h3>
+          <p class="text-green-600 font-bold mt-1">$8.50</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="root">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="বেগুন" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">বেগুন</h3>
+          <p class="text-green-600 font-bold mt-1">$9.00</p>
+        </div>
+         <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="fruit">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="আঙুর" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">আঙুর</h3>
+          <p class="text-green-600 font-bold mt-1">$13.50</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="flower">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="ক্যাপসিকাম" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">ক্যাপসিকাম</h3>
+          <p class="text-green-600 font-bold mt-1">$12.00</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="leafy">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="পালং শাক" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">পালং শাক</h3>
+          <p class="text-green-600 font-bold mt-1">$8.50</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="root">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="বেগুন" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">বেগুন</h3>
+          <p class="text-green-600 font-bold mt-1">$9.00</p>
+        </div>
+         <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="fruit">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="আঙুর" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">আঙুর</h3>
+          <p class="text-green-600 font-bold mt-1">$13.50</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="flower">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="ক্যাপসিকাম" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">ক্যাপসিকাম</h3>
+          <p class="text-green-600 font-bold mt-1">$12.00</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="leafy">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="পালং শাক" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">পালং শাক</h3>
+          <p class="text-green-600 font-bold mt-1">$8.50</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="root">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="বেগুন" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">বেগুন</h3>
+          <p class="text-green-600 font-bold mt-1">$9.00</p>
+        </div>
+         <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="fruit">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="আঙুর" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">আঙুর</h3>
+          <p class="text-green-600 font-bold mt-1">$13.50</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="flower">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="ক্যাপসিকাম" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">ক্যাপসিকাম</h3>
+          <p class="text-green-600 font-bold mt-1">$12.00</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="leafy">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="পালং শাক" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">পালং শাক</h3>
+          <p class="text-green-600 font-bold mt-1">$8.50</p>
+        </div>
+
+        <div class="product-card border rounded-lg p-3 text-center shadow-sm hover:shadow transition" data-category="root">
+          <img src="{% static 'images/homeadvatigeimages.png' %}" alt="বেগুন" class="mx-auto mb-2 rounded h-24 object-cover">
+          <h3 class="font-medium text-gray-700">বেগুন</h3>
+          <p class="text-green-600 font-bold mt-1">$9.00</p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Filter Script -->
+<script>
+  function filterProducts(category) {
+    const products = document.querySelectorAll('.product-card');
+    products.forEach(product => {
+      if (category === 'all' || product.dataset.category === category) {
+        product.classList.remove('hidden');
+      } else {
+        product.classList.add('hidden');
+      }
+    });
+  }
+</script>
+
+
+
+
+</div>
+<script src="{% static 'js/mainjs.js' %}"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> 
+{% endblock %}
+
+
